@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Cazar Patos</string>
+    <string name="buttonLogin_Text">Login</string>
 </resources>
