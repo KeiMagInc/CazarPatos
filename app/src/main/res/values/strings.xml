@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">Cazar Patos</string>
-    <string name="buttonLogin_Text">Login</string>
+    <string name="app_name">Duck Hunter</string>
+    <string name="hint_email">Enter your email</string>
+    <string name="hint_password">Enter your password</string>
+    <string name="text_remember_me">Remember me</string>
+    <string name="text_start_game">Start game</string>
+    <string name="text_new_user">New user</string>
+    <string name="error_email_required">Email is required</string>
+    <string name="error_password_required">Password is required</string>
+    <string name="error_password_min_length">The password must have at least 3 characters</string>
+    <string name="dialog_title_game_end">End of the game</string>
+    <string name="dialog_message_congratulations">Congratulations!!\nYou hunted %1$d ducks</string>
+    <string name="button_restart">Restart</string>
+    <string name="button_close">Close</string>
 </resources>
