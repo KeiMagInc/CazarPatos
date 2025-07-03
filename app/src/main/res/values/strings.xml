@@ -12,4 +12,7 @@
     <string name="dialog_message_congratulations">Congratulations!!\nYou hunted %1$d ducks</string>
     <string name="button_restart">Restart</string>
     <string name="button_close">Close</string>
+    <string name="text_hall_of_fame">hall of fame</string>
+    <string name="text_ducks">Ducks</string>
+    <string name="text_player">Player</string>
 </resources>
