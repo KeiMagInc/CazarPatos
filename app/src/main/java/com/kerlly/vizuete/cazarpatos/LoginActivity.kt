@@ -8,7 +8,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.media3.common.util.Log
+import android.util.Log
 
 class LoginActivity : AppCompatActivity() {
     lateinit var editTextEmail: EditText
@@ -95,41 +95,65 @@ class LoginActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun leerDatosDePreferencias() {
-        val listadoLeido = manejadorArchivo.ReadInformation()
-        if (listadoLeido.first != null) {
-            checkBoxRecordarme.isChecked = true
-        }
-        editTextEmail.setText(listadoLeido.first)
-        editTextPassword.setText(listadoLeido.second)
-    }
-
-    private fun GuardarDatosEnPreferencias() {
-        manejadorArchivo =
-            SharedPreferencesManager(this)
-        manejadorArchivo. SaveInformation ("epn.fis" to "123")
-        manejadorArchivo = EncriptedSharedPreferencesManager (this)
-        manejadorArchivo. SaveInformation ("epn.fis" to "1234")
-    }
-    private fun LeerDatosDePreferencias() {
-        var datoLeido: Pair<String, String>
+    private fun guardarDatosEnPreferencias(){
         manejadorArchivo = SharedPreferencesManager(this)
-        datoLeido = manejadorArchivo.ReadInformation()
-        Log.d("TAG", "SharedPreferencesManager"+datoLeido.toList().toString())
-        manejadorArchivo = EncriptedSharedPreferencesManager(this)
-        datoLeido = manejadorArchivo.ReadInformation()
-        Log.d("TAG", "EncriptedSharedPreferencesManager"+datoLeido.toList().toString())
-    }
-
-    private fun guardarDatosEnPreferencias() {
         val email = editTextEmail.text.toString()
         val clave = editTextPassword.text.toString()
-        val listadoAGrabar: Pair<String, String>
-        if (checkBoxRecordarme.isChecked) {
+        val listadoAGrabar:Pair<String,String>
+        if(checkBoxRecordarme.isChecked){
             listadoAGrabar = email to clave
-        } else {
-            listadoAGrabar = "" to ""
         }
+        else{
+            listadoAGrabar ="" to ""
+        }
+
+        manejadorArchivo = SharedPreferencesManager(this)
         manejadorArchivo.SaveInformation(listadoAGrabar)
+
+        manejadorArchivo = EncriptedSharedPreferencesManager(this)
+        manejadorArchivo.SaveInformation(listadoAGrabar)
+
+        manejadorArchivo = FileInternalManager(this)
+        manejadorArchivo.SaveInformation(listadoAGrabar)
+
+        manejadorArchivo = FileExternalManager(this)
+        manejadorArchivo.SaveInformation(listadoAGrabar)
+
     }
+
+    private fun leerDatosDePreferencias(){
+        manejadorArchivo = SharedPreferencesManager(this)
+        var listadoLeido : Pair<String, String>
+
+        listadoLeido = manejadorArchivo.ReadInformation()
+        if(listadoLeido.first != null){
+            checkBoxRecordarme.isChecked = true
+        }
+        editTextEmail.setText ( listadoLeido.first )
+        editTextPassword.setText ( listadoLeido.second )
+
+        manejadorArchivo = EncriptedSharedPreferencesManager(this)
+
+        listadoLeido = manejadorArchivo.ReadInformation()
+        if(listadoLeido.first != null){
+            checkBoxRecordarme.isChecked = true
+        }
+
+        editTextEmail.setText ( listadoLeido.first )
+        editTextPassword.setText ( listadoLeido.second )
+
+        manejadorArchivo = EncriptedSharedPreferencesManager(this)
+        listadoLeido = manejadorArchivo.ReadInformation()
+        Log.d("TAG", "EncryptedSharedPreferences: ${listadoLeido.toList()}")
+
+        manejadorArchivo = FileInternalManager(this)
+        listadoLeido = manejadorArchivo.ReadInformation()
+        Log.d("TAG", "Aquí se ve el dato del archivo interno: ${listadoLeido.toList()}")
+
+        manejadorArchivo = FileExternalManager(this)
+        listadoLeido = manejadorArchivo.ReadInformation()
+        Log.d("TAG", "Aquí se ve el dato del archivo externo: " + listadoLeido.toList().toString())
+
+    }
+
 }
