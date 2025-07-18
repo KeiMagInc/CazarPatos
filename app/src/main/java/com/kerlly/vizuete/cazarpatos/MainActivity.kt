@@ -1,5 +1,6 @@
 package com.kerlly.vizuete.cazarpatos
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -7,11 +8,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.media.AudioAttributes
 import android.media.SoundPool
+import android.net.Uri
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -47,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         //Obtener el usuario de pantalla login
         val extras = intent.extras ?: return
         var usuario = extras.getString(EXTRA_LOGIN) ?:"Unknown"
+        usuario = usuario.substringBefore("@")
         textViewUser.setText(usuario)
         //Determina el ancho y largo de pantalla
         initializeScreen()
@@ -98,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         val maximoY = screenHeight - imageViewDuck.getHeight()
         // Generamos 2 números aleatorios, para la coordenadas x , y
         val randomX = Random.nextInt(0,maximoX - min + 1)
-        val randomY = Random.nextInt(0,maximoY - min + 1)
+        val randomY = Random.nextInt(92,maximoY - min + 1)
 
         imageViewDuck.animate()
             .x(randomX.toFloat())
@@ -115,6 +123,9 @@ class MainActivity : AppCompatActivity() {
             textViewTime.setText("0s")
             gameOver = true
             showGameOverDialog()
+            val nombreJugador = textViewUser.text.toString()
+            val patosCazados = textViewCounter.text.toString()
+            procesarPuntajePatosCazados(nombreJugador, patosCazados.toInt()) //Firestore
         }
     }
     private fun initializeCountdown() {
@@ -125,6 +136,7 @@ class MainActivity : AppCompatActivity() {
         builder
             .setMessage(getString(R.string.dialog_message_congratulations, counter))
             .setTitle(getString(R.string.dialog_title_game_end))
+            .setIcon(R.drawable.duck)
             .setPositiveButton(getString(R.string.button_restart)) { _, _ ->
                 restartGame()
             }
@@ -143,6 +155,99 @@ class MainActivity : AppCompatActivity() {
         initializeCountdown()
     }
 
+    fun jugarOnline(){
+        var intentWeb = Intent()
+        intentWeb.action = Intent.ACTION_VIEW
+        intentWeb.data = Uri.parse("https://duckhuntjs.com/")
+        startActivity(intentWeb)
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_nuevo_juego -> {
+                restartGame()
+                true
+            }
+            R.id.action_jugar_online -> {
+                jugarOnline()
+                true
+            }
+            R.id.action_ranking -> {
+                val intent = Intent(this, RankingActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.action_salir -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    fun procesarPuntajePatosCazados(nombreJugador:String, patosCazados:Int){
+        val jugador = Player(nombreJugador,patosCazados)
+        //Trata de obtener id del documento del ranking específico,
+        // si lo obtiene lo actualiza, caso contrario lo crea
+        val db = Firebase.firestore
+        db.collection("ranking")
+            .whereEqualTo("username", jugador.username)
+            .get()
+            .addOnSuccessListener { documents ->
+                if(documents!= null &&
+                    documents.documents != null &&
+                    documents.documents.count()>0
+                ){
+                    val idDocumento = documents.documents.get(0).id
+                    val jugadorLeido = documents.documents.get(0).toObject(Player::class.java)
+                    if(jugadorLeido!!.huntedDucks < patosCazados )
+                    {
+                        Log.w(EXTRA_LOGIN, "Puntaje actual mayor, por lo tanto actualizado")
+                        actualizarPuntajeJugador(idDocumento, jugador)
+                    }
+                    else{
+                        Log.w(EXTRA_LOGIN, "No se actualizo puntaje, por ser menor al actual")
+                    }
+                }
+                else{
+                    ingresarPuntajeJugador(jugador)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w(EXTRA_LOGIN, "Error getting documents", exception)
+                Toast.makeText(this, "Error al obtener datos de jugador", Toast.LENGTH_LONG).show()
+            }
+    }
+    fun ingresarPuntajeJugador(jugador:Player){
+        val db = Firebase.firestore
+        db.collection("ranking")
+            .add(jugador)
+            .addOnSuccessListener { documentReference ->
+                Toast.makeText(this,"Puntaje usuario ingresado exitosamente", Toast.LENGTH_LONG).show()
+            }
+            .addOnFailureListener { exception ->
+                Log.w(EXTRA_LOGIN, "Error adding document", exception)
+                Toast.makeText(this,"Error al ingresar el puntaje", Toast.LENGTH_LONG).show()
+            }
+    }
+    fun actualizarPuntajeJugador(idDocumento:String, jugador:Player){
+        val db = Firebase.firestore
+        db.collection("ranking")
+            .document(idDocumento)
+            //.update(contactoHashMap)
+            .set(jugador) //otra forma de actualizar
+            .addOnSuccessListener {
+                Toast.makeText(this,"Puntaje de usuario actualizado exitosamente", Toast.LENGTH_LONG).show()
+            }
+            .addOnFailureListener { exception ->
+                Log.w(EXTRA_LOGIN, "Error updating document", exception)
+                Toast.makeText(this,"Error al actualizar el puntaje" , Toast.LENGTH_LONG).show()
+            }
+    }
+
     override fun onStop() {
         Log.w(EXTRA_LOGIN, "Play canceled")
         countDownTimer.cancel()
@@ -156,4 +261,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         soundPool.release()
     }
+
+
 }

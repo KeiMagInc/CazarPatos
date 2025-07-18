@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_nuevo_juego"
+        android:title="@string/text_new_game" />
+    <item
+        android:id="@+id/action_jugar_online"
+        android:title="@string/text_play_online" />
+    <item
+        android:id="@+id/action_ranking"
+        android:title="@string/text_hall_of_fame" />
+    <item
+        android:id="@+id/action_salir"
+        android:title="@string/text_close" />
+</menu>
