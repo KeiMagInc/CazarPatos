@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_game"
-    android:padding="24dp"
+    android:padding="16dp"
     tools:context=".RegisterActivity">
+
     <ImageView
         android:id="@+id/imageViewLogo"
         android:layout_width="0dp"
@@ -17,47 +18,81 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/title" />
 
-    <Button
-        android:id="@+id/buttonRegisterUser"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="@color/colorPrimaryLight"
-        android:text="@string/create"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordRegister" />
-
     <EditText
         android:id="@+id/editTextEmailRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        android:hint="@string/email"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:fontFamily="@font/press_start_2p"
+        android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="191dp" />
+        android:minHeight="48dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewLogo"
+        app:layout_constraintStart_toStartOf="@+id/imageViewLogo"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewLogo" />
 
     <EditText
         android:id="@+id/editTextPasswordRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/black"
-        android:hint="@string/password_m_n_6_characters"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:fontFamily="@font/press_start_2p"
+        android:hint="@string/hint_password"
         android:inputType="textPassword"
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:minHeight="48dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/editTextEmailRegister"
+        app:layout_constraintStart_toStartOf="@+id/editTextEmailRegister"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmailRegister" />
+
+    <EditText
+        android:id="@+id/editTextConfirmPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:fontFamily="@font/press_start_2p"
+        android:hint="@string/hint_confirm_password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPasswordRegister"
+        app:layout_constraintStart_toStartOf="@+id/editTextPasswordRegister"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordRegister" />
+
+    <Button
+        android:id="@+id/buttonSignUp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:fontFamily="@font/pixel"
+        android:text="@string/text_sign_up"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@+id/editTextConfirmPassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextConfirmPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
+
+    <Button
+        android:id="@+id/buttonBackToLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:fontFamily="@font/pixel"
+        android:text="@string/text_back_to_login"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@+id/buttonSignUp"
+        app:layout_constraintStart_toStartOf="@+id/buttonSignUp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSignUp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
