@@ -4,24 +4,29 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class RankingAdapter(private val dataSet: ArrayList<Player>) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     private val TYPE_HEADER : Int = 0
+
     class ViewHolderHeader(view : View) : RecyclerView.ViewHolder(view){
         val textViewPosicion: TextView = view.findViewById(R.id.textViewPosicion)
         val textViewPatosCazados: TextView = view.findViewById(R.id.textViewPatosCazados)
         val textViewUsuario: TextView = view.findViewById(R.id.textViewUsuario)
+
     }
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textViewPosicion: TextView
         val textViewPatosCazados: TextView
         val textViewUsuario: TextView
+        val imageViewMedal: ImageView
         init {
             textViewPosicion = view.findViewById(R.id.textViewPosicion)
             textViewPatosCazados = view.findViewById(R.id.textViewPatosCazados)
             textViewUsuario = view.findViewById(R.id.textViewUsuario)
+            imageViewMedal = view.findViewById(R.id.imageViewMedal)
         }
     }
     override fun getItemViewType(position: Int): Int {
@@ -52,6 +57,24 @@ class RankingAdapter(private val dataSet: ArrayList<Player>) : RecyclerView.Adap
             holder.textViewPosicion.text = position.toString()
             holder.textViewPatosCazados.text = dataSet[position-1].huntedDucks.toString()
             holder.textViewUsuario.text = dataSet[position-1].username
+        }
+
+        when (position) {
+            0 -> { // Primer lugar
+                viewHolder.imageViewMedal.setImageResource(R.drawable.gold)
+                viewHolder.imageViewMedal.visibility = View.VISIBLE
+            }
+            1 -> { // Segundo lugar
+                viewHolder.imageViewMedal.setImageResource(R.drawable.silver)
+                viewHolder.imageViewMedal.visibility = View.VISIBLE
+            }
+            2 -> { // Tercer lugar
+                viewHolder.imageViewMedal.setImageResource(R.drawable.bronze)
+                viewHolder.imageViewMedal.visibility = View.VISIBLE
+            }
+            else -> { // Del cuarto lugar en adelante
+                viewHolder.imageViewMedal.visibility = View.GONE
+            }
         }
     }
     override fun getItemCount() = dataSet.size + 1

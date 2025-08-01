@@ -25,6 +25,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.Locale
@@ -285,8 +286,25 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.action_salir -> {
-                finish()
-                true
+                    // 1. Cerramos la sesión del usuario en Firebase Authentication.
+                    FirebaseAuth.getInstance().signOut()
+                    Toast.makeText(this, "Sesión cerrada.", Toast.LENGTH_SHORT).show()
+
+                    // 2. Creamos un Intent para volver a LoginActivity.
+                    val intent = Intent(this, LoginActivity::class.java)
+
+                    // 3. Añadimos flags para limpiar la pila de actividades.
+                    // Esto es crucial para que el usuario no pueda volver a MainActivity
+                    // con el botón "Atrás" después de cerrar sesión.
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                    // 4. Se inicia LoginActivity como una tarea completamente nueva.
+                    startActivity(intent)
+
+                    // 5. Cerramos la actividad actual (MainActivity).
+                androidx.compose.foundation.layout.Box {
+                    finish()
+                }
             }
 
             else -> super.onOptionsItemSelected(item)
