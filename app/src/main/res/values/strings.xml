@@ -18,5 +18,9 @@
     <string name="text_new_game">New Game</string>
     <string name="text_play_online">Play Online</string>
     <string name="text_close">Close</string>
+    <string name="new_user">New User</string>
+    <string name="email">Email</string>
+    <string name="password_m_n_6_characters">Password (mín. 6 characters)</string>
+    <string name="create">Create</string>
 
 </resources>

@@ -9,6 +9,7 @@ import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -69,8 +70,10 @@ class LoginActivity : AppCompatActivity() {
             AutenticarUsuario(email, clave)
         }
         buttonNewUser.setOnClickListener {
-
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
+
         mediaPlayer = MediaPlayer.create(this, R.raw.title_screen)
         mediaPlayer.start()
     }
