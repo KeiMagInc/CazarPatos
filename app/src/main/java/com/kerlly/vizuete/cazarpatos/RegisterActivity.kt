@@ -24,7 +24,6 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-
         emailEditText = findViewById(R.id.editTextEmailRegister)
         passwordEditText = findViewById(R.id.editTextPasswordRegister)
         confirmPasswordEditText = findViewById(R.id.editTextConfirmPassword)
@@ -53,31 +52,26 @@ class RegisterActivity : AppCompatActivity() {
             emailEditText.requestFocus()
             return
         }
-
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailEditText.error = getString(R.string.error_invalid_email)
             emailEditText.requestFocus()
             return
         }
-
         if (password.isEmpty()) {
             passwordEditText.error = getString(R.string.error_password_required)
             passwordEditText.requestFocus()
             return
         }
-
         if (password.length < 8) {
             passwordEditText.error = getString(R.string.error_password_length)
             passwordEditText.requestFocus()
             return
         }
-
         if (confirmPassword.isEmpty()) {
             confirmPasswordEditText.error = getString(R.string.error_password_required)
             confirmPasswordEditText.requestFocus()
             return
         }
-
         if (password != confirmPassword) {
             confirmPasswordEditText.error = getString(R.string.error_password_mismatch)
             confirmPasswordEditText.requestFocus()
@@ -87,6 +81,7 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    // Si la autenticación es exitosa, guarda los datos del jugador en Firestore
                     val userId = auth.currentUser?.uid ?: ""
                     val playerDocument = hashMapOf(
                         "ducks" to 0,
@@ -95,17 +90,27 @@ class RegisterActivity : AppCompatActivity() {
                     db.collection("players").document(userId)
                         .set(playerDocument)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Usuario registrado con éxito.", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, MainActivity::class.java)
-                            intent.putExtra(EXTRA_LOGIN, email)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
+                            Toast.makeText(
+                                this,
+                                "Registro exitoso. Por favor, inicia sesión.",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            finish()
                         }
                         .addOnFailureListener { e ->
-                            Toast.makeText(this, "Error al guardar datos: ${e.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this,
+                                "Error al guardar datos del jugador: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                 } else {
-                    Toast.makeText(this, "Error en el registro: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Error en el registro: ${task.exception?.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
     }
