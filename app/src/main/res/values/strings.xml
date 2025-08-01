@@ -20,10 +20,11 @@
     <string name="text_close">Close</string>
     <string name="new_user">New User</string>
     <string name="email">Email</string>
-    <string name="password_m_n_6_characters">Password (mín. 6 characters)</string>
     <string name="create">Create</string>
     <string name="text_sign_up">Register</string>
     <string name="text_back_to_login">Return to Login</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="error_invalid_email">Invalid email address</string>
+    <string name="error_password_length">The password must be at least 8 characters long</string>
 </resources>
