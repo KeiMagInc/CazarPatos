@@ -26,6 +26,20 @@ class LoginActivity : AppCompatActivity() {
     lateinit var checkBoxRecordarme: CheckBox
     private lateinit var auth: FirebaseAuth
 
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            Toast.makeText(this, "Session already started. Welcome back.", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra(EXTRA_LOGIN, currentUser.email) // Pasamos el email a la MainActivity
+            startActivity(intent)
+
+            finish()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -69,6 +83,7 @@ class LoginActivity : AppCompatActivity() {
             //finish()
             AutenticarUsuario(email, clave)
         }
+        // Va a la pantalla de registrarse
         buttonNewUser.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
